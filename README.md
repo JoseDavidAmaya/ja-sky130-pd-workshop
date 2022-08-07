@@ -3,12 +3,18 @@
 This is the lab report of the sky130-pd-workshop
 
 Quick navigation
-- [Day 1](#day-1) 
+- [Day 1](#day-1)
+	- [Floorplaning](#floorplan)
+	- [Placement](#placement)
 - [Day 2](#day-2) 
 - [Day 3](#day-3) 
+	- [IO placer](#io-placer) 
+	- [Custom cells](#custom-cells) 
+	- [Spice model](#spice-model-extraction-and-characterization) 
 - [Day 4](#day-4) 
+	- [STA](#static-timing-analysis) 
+	- [CTS](#clock-tree-synthesis) 
 - [Day 5](#day-5) 
-
 
 # Day 1
 
@@ -214,9 +220,11 @@ To check if there's a connection to a component, we press S multiple times while
 To see things connected to the output
 
 1 time to select the output
+
 ![img](img/day3/14.png)
 
 2 times to select the connections of the output
+
 ![img](img/day3/15.png)
 
 ## Spice model extraction and characterization
@@ -276,9 +284,11 @@ When the output is rising, we measure the time delta between 20%  of the maximum
 max value is 3.3V
 
 20%
+
 ![img](img/day3/26.png)
 
 80%
+
 ![img](img/day3/27.png)
 
 cell rise delay = 2.195n - 2.152n = 0.043n
@@ -288,9 +298,11 @@ cell rise delay = 2.195n - 2.152n = 0.043n
 Procedure is similar
 
 80%
+
 ![img](img/day3/28.png)
 
 20%
+
 ![img](img/day3/29.png)
 
 cell fall delay = 4.06642n - 4.0403n = 0.02612n
@@ -396,6 +408,7 @@ run_synthesis
 ```
 
 We that the see the cell is begin used
+
 ![img](img/day4/7.png)
 
 ![img](img/day4/8.png)
