@@ -20,28 +20,28 @@ package require openlane 0.9
 prep -design picorv32a
 ```
 
-![img](img/day1/1.jpg)
+![img](img/day1/1.png)
 
 After that, the runs directory is created inside the designs/picorv32a folder
 
-![img](img/day1/2.jpg)
+![img](img/day1/2.png)
 
 We run synthesis with the command:
 `run_synthesis`
 
-![img](img/day1/3.jpg)
+![img](img/day1/3.png)
 
 Note that tns and wns are both negative
 
 We calculate flop ratio and buffer ratio
 
-![img](img/day1/4.jpg)
+![img](img/day1/4.png)
 
-![img](img/day1/5.jpg)
+![img](img/day1/5.png)
 
 Flop ratio = Number of dfxtp cells / Number of cells = 1613 / 14876 = 0.1084 
 
-![img](img/day1/6.jpg)
+![img](img/day1/6.png)
 
 Buffer ratio = (Number of buf cells) / Number of cells = (1656 + 8) / 14876 = 0.11185
 
