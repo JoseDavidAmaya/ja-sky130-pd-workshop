@@ -515,7 +515,21 @@ run_cts
 
 ![img](img/day4/21.png)
 
-The step fails with error "utilization exceeds 100%"
+The step fails with error `[utilization exceeds 100%]`
+
+To fix the error we have to define a variable
+
+```
+set ::env(CURRENT_DEF) /openLANE_flow/designs/picorv32a/runs/07-08_13-21/results/placement/picorv32a.placement.def
+```
+
+Then we run CTS step again
+
+![img](img/day4/22.png)
+
+![img](img/day4/23.png)
+
+the step runs successfully
 
 # Day 5
 
