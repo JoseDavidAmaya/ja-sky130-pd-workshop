@@ -552,5 +552,8 @@ run_routing
 
 ![img](img/day5/3.png)
 
-![img](img/day5/4.png)
+Wee see that TNS and WNS are 0.00
 
+A visualization of the routed layout is shown below
+
+![img](img/day5/4.png)
