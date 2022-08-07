@@ -2,6 +2,14 @@
 
 This is the lab report of the sky130-pd-workshop
 
+Quick navigation
+- [Day 1](#day-1) 
+- [Day 2](#day-2) 
+- [Day 3](#day-3) 
+- [Day 4](#day-4) 
+- [Day 5](#day-5) 
+
+
 # Day 1
 
 To start the RTL to GDSII flow, we first go to the openlane directory and run docker, then start the flow in interactive mode using the picorv32a design
