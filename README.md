@@ -119,7 +119,7 @@ We go back to running magic on the floorplan
 
 ![img](img/day3/1.png)
 
-Pins should be equidistant, but they don't look like it
+Pins should be equidistant, but they don't look like it because there are places where there are no pins
 
 On openlane, we can change the variables with a command
 
@@ -286,3 +286,214 @@ Procedure is similar
 ![img](img/day3/29.png)
 
 cell fall delay = 4.06642n - 4.0403n = 0.02612n
+
+# Day 4
+
+We continue with the inverter cell, so we open the inverter in magic
+
+run magic from  `~/Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign`
+
+```
+magic -T sky130A.tech sky130_inv.mag &
+```
+
+![img](img/day4/1.png)
+
+We need to check that the input and outputs (A and Y) are aligned with horizontal and vertical tracks of the local interconnect (locali)
+
+Information on the tracks is on 
+
+`~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks.info`
+
+we check layer li1
+
+![img](img/day4/2.png)
+
+on the tkcon console we configure the grid to the dimensions of the li1
+
+```
+grid 0.46um 0.34um 0.23um 0.17um
+```
+
+We also check that the width of the cell is a multiple of the x pitch
+
+![img](img/day4/3.png)
+
+Before extracting the lef file we save it with the name `sky130_vsdinv.mag`
+
+on tkcon console
+```
+save sky130_vsdinv.mag
+```
+
+then close magic and open the saved cell
+
+```
+magic -T sky130A.tech sky130_vsdinv.mag &
+```
+
+then on tkcon console we generate the lef file
+
+```
+lef write
+```
+
+![img](img/day4/4.png)
+
+![img](img/day4/5.png)
+
+Contents of the file
+
+![img](img/day4/6.png)
+
+
+
+We then copy this lef file to the `picor32va/src` folder
+
+```
+cp sky130_vsdinv.lef ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+```
+
+we also copy the `sky130_fd_sc_hd_*.lib` files inside the libs folder to the `picorv32a/` folder.
+
+```
+cp libs/sky130_fd_sc_hd_*.lib ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+```
+
+we also add these lines to the `picorv32a/config.tcl`
+
+```
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
+set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib"
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
+```
+
+Now we start the openlane flow
+
+and we run the next two commands
+
+```
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+
+add_lefs -src $lefs
+```
+
+Then we run the synthesis
+
+```
+run_synthesis
+```
+
+We that the see the cell is begin used
+![img](img/day4/7.png)
+
+![img](img/day4/8.png)
+
+
+tns -711.59
+wns -23.89
+Chip area for module '\picorv32a': 
+147712.918400
+
+We try to improve the timing by changing the synth strategy
+
+```
+set ::env(SYNTH_STRATEGY) "DELAY 0"
+```
+
+and run synthesis again
+
+![img](img/day4/9.png)
+
+![img](img/day4/10.png)
+
+tns 0.00
+wns 0.00
+Chip area for module '\picorv32a': 
+196832.528000
+
+Area increases, but TNS and WNS are 0
+
+Now we run floorplanning, placement and routing, running `run_floorplan` results in an error, so we execute the next commands, which not only run floorplanning, but placement, pdn and routing
+
+```
+init_floorplan
+place_io
+global_placement_or
+detailed_placement
+tap_decap_or
+detailed_placement
+gen_pdn
+run_routing
+```
+
+![img](img/day4/11.png)
+
+![img](img/day4/12.png)
+
+we open the layout in magic
+
+```
+magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+![img](img/day4/13.png)
+
+We zoom and find the cell in the layout
+
+![img](img/day4/14.png)
+
+we run expand on the tkcon console
+
+![img](img/day4/15.png)
+
+
+## Static timing analysis
+
+We will do timing analysis in OpenSTA
+
+checking the `*typical.lib`
+
+![img](img/day4/16.png)
+
+Capacitance of 2.328 is updated in `my_base.sdc`
+
+![img](img/day4/17.png)
+
+
+We update `sta.conf`
+
+![img](img/day4/18.png)
+
+
+We run
+
+```
+sta sta.conf
+```
+
+and we get
+
+![img](img/day4/19.png)
+
+![img](img/day4/20.png)
+
+
+## Clock tree synthesis
+
+Before running synthesis we replace our synthesis results with the provided .v file and continue from floorplan
+
+then we run CTS
+
+```
+run_cts
+```
+
+![img](img/day4/21.png)
+
+The step fails "utilization exceeds 100%"
+
+
