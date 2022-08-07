@@ -417,7 +417,7 @@ Chip area for module '\picorv32a':
 
 Area increases, but TNS and WNS are 0
 
-Now we run floorplanning, placement and routing, running `run_floorplan` results in an error, so we execute the next commands, which not only run floorplanning, but placement, pdn and routing
+Now we run floorplanning, placement and routing, running `run_floorplan` results in an error, so we execute the next set of commands, which not only perform floorplaning, but also run placement, generate power distribution network and generate routing
 
 ```
 init_floorplan
@@ -494,6 +494,28 @@ run_cts
 
 ![img](img/day4/21.png)
 
-The step fails "utilization exceeds 100%"
+The step fails with error "utilization exceeds 100%"
 
+# Day 5
+
+We generate the power distribution network
+
+run
+```
+gen_pdn
+```
+
+![img](img/day5/1.png)
+
+![img](img/day5/2.png)
+
+then we run routing
+
+```
+run_routing
+```
+
+![img](img/day5/3.png)
+
+![img](img/day5/4.png)
 
