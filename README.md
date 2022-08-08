@@ -505,9 +505,7 @@ and we get
 
 ## Clock tree synthesis
 
-Before running synthesis we replace our synthesis results with the provided .v file and continue from floorplan
-
-then we run CTS
+We run CTS, which attempts to get the clock to all of components that need it with minimal skew
 
 ```
 run_cts
